@@ -2,7 +2,7 @@ import React from 'react'
 
 const Page = () => {
   return (
-    <div>Página de pesquisa</div>
+    <div>Página de pesquisa!</div>
   )
 }
 
