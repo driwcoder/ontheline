@@ -2,9 +2,12 @@ import type { Metadata } from "next";
 import { Roboto_Mono } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "@/components/ui/toaster";
 
-const roboto = Roboto_Mono({ subsets: ["latin"],
-weight: ["400", "100", "700"] });
+const roboto = Roboto_Mono({
+  subsets: ["latin"],
+  weight: ["400", "100", "700"],
+});
 
 export const robotoMono: Metadata = {
   title: "Create Next App",
@@ -19,7 +22,10 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="pt-br">
-        <body className={` ${roboto.className}`}>{children}</body>
+        <body className={` ${roboto.className}`}>
+          {children}
+          <Toaster />
+        </body>
       </html>
     </ClerkProvider>
   );
