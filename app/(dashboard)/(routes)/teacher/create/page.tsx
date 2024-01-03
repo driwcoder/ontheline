@@ -18,7 +18,6 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/components/ui/use-toast";
 import { toast } from "@/components/ui/use-toast";
 
 //Definindo qual o formato a se seguir do nosso formulário
@@ -46,8 +45,12 @@ const CreatePage = () => {
   // definindo a ação ao clicar no button submit (lembrando que é uma constante, deverá ser chamada como propriedade nos manipuladores de evento onClick ou onSubmit)
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await axios.post("/api/course", values);
-      router.push(`/teacher courses/${response.data.id}`);
+      const response = await axios.post("/api/courses", values);
+      router.push(`/teacher/courses/${response.data.id}`);
+      toast({
+        title: "Salvo",
+        description: "Seu curso foi registrado com sucesso!"
+      })
     } catch (error) {
       console.log("Alguma coisa deu errado");
       toast({
