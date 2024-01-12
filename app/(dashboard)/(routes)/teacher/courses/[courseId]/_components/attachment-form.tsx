@@ -2,14 +2,14 @@
 
 import * as z from "zod";
 import axios from "axios";
-import { File, ImageIcon, Loader2, Pencil, PlusCircle, X } from "lucide-react";
+import { Pencil, PlusCircle, ImageIcon, File, Loader2, X } from "lucide-react";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
 
-import { Attachment, Course } from "@prisma/client";
-import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
+import { Attachment, Course } from "@prisma/client";
+
+import { Button } from "@/components/ui/button";
 import { FileUpload } from "@/components/file-upload";
 
 interface AttachmentFormProps {
@@ -51,16 +51,33 @@ export const AttachmentForm = ({
     }
   };
 
-
-  // minuto do video (Course Attachment Form) => 15:12
-
+  const onDelete = async (id: string) => {
+    try {
+      setDeletingId(id);
+      await axios.delete(`/api/courses/${courseId}/attachments/${id}`);
+      toast({
+        title: "Success!",
+        description: "O arquivo foi deletado.",
+        variant: "success",
+      });
+      router.refresh();
+    } catch {
+      toast({
+        title: "Erro!",
+        description: "Foi impossivel deletar o arquivo, tente mais tarde!",
+        variant: "destructive",
+      });
+    } finally {
+      setDeletingId(null);
+    }
+  };
 
   return (
-    <div className="mt-2 border bg-slate-100 rounded-md p-4">
+    <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
         Arquivos do curso
         <Button onClick={toggleEdit} variant="ghost">
-          {isEditing && <>Cancelar</>}
+          {isEditing && <>Cancel</>}
           {!isEditing && (
             <>
               <PlusCircle className="h-4 w-4 mr-2" />
@@ -72,7 +89,9 @@ export const AttachmentForm = ({
       {!isEditing && (
         <>
           {initialData.attachments.length === 0 && (
-            <p className="text-sm mt-2 text-slate-500 italic">Sem anexos</p>
+            <p className="text-sm mt-2 text-slate-500 italic">
+              Sem arquivos ainda.
+            </p>
           )}
           {initialData.attachments.length > 0 && (
             <div className="space-y-2">
@@ -81,16 +100,19 @@ export const AttachmentForm = ({
                   key={attachment.id}
                   className="flex items-center p-3 w-full bg-sky-100 border-sky-200 border text-sky-700 rounded-md"
                 >
-                  <File className="h-4 ws-4 mr-2 flex-shrink-0" />
+                  <File className="h-4 w-4 mr-2 flex-shrink-0" />
                   <p className="text-xs line-clamp-1">{attachment.name}</p>
                   {deletingId === attachment.id && (
                     <div>
-                      <Loader2 className="h-4 w-4 animate-spin"/>
+                      <Loader2 className="h-4 w-4 animate-spin" />
                     </div>
                   )}
                   {deletingId !== attachment.id && (
-                    <button className="ml-auto hover:opacity-75 hover:text-red-500 transition">
-                      <X className="h-4 w-4"/>
+                    <button
+                      onClick={() => onDelete(attachment.id)}
+                      className="ml-auto hover:opacity-75 transition"
+                    >
+                      <X className="h-4 w-4" />
                     </button>
                   )}
                 </div>
@@ -99,7 +121,6 @@ export const AttachmentForm = ({
           )}
         </>
       )}
-
       {isEditing && (
         <div>
           <FileUpload
@@ -111,7 +132,7 @@ export const AttachmentForm = ({
             }}
           />
           <div className="text-xs text-muted-foreground mt-4">
-            Adicione arquivos complementares para seus alunos.
+            Adicione arquivos adicionais que ajude seus alunos.
           </div>
         </div>
       )}
