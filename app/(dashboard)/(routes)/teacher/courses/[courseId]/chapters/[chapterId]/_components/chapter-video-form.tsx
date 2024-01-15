@@ -2,28 +2,27 @@
 
 import * as z from "zod";
 import axios from "axios";
-import { ImageIcon, Pencil, PlusCircle } from "lucide-react";
+import {  Pencil, PlusCircle, Video } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
-import { Course } from "@prisma/client";
+import { Chapter, MuxData } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
 import { FileUpload } from "@/components/file-upload";
 
-interface ImageFormProps {
-  initialData: Course;
+interface ChapterVideoFormProps {
+  initialData: Chapter & { muxData?: MuxData | null };
   courseId: string;
+  chapterId: string
 }
 
 const formSchema = z.object({
-  imageUrl: z.string().min(1, {
-    message: "Imagem obrigatória",
-  }),
+  videoUrl: z.string().min(1),
 });
 
-export const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
+export const ChapterVideoForm = ({ initialData, courseId, chapterId }: ChapterVideoFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const toggleEdit = () => setIsEditing((current) => !current);
@@ -32,10 +31,10 @@ export const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.patch(`/api/courses/${courseId}`, values);
+      await axios.patch(`/api/courses/${courseId}/chapter/${chapterId}`, values);
       toast({
-        title: "Imagem atualizada",
-        description: "A capa do seu curso foi atualizada!",
+        title: "Capítulo atualizado",
+        description: "Um vídeo foi adicionado ao capítulo!",
         variant: "success",
       });
       toggleEdit();
@@ -55,49 +54,49 @@ export const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
         Imagem do curso
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing && <>Cancelar</>}
-          {!isEditing && !initialData.imageUrl && (
+          {!isEditing && !initialData.videoUrl && (
             <>
               <PlusCircle className="h-4 w-4 mr-2" />
-              Adicione uma imagem
+              Adicione um vídeo
             </>
           )}
-          {!isEditing && initialData.imageUrl && (
+          {!isEditing && initialData.videoUrl && (
             <>
               <Pencil className="h-4 w-4 mr-2" />
-              Trocar imagem
+              Trocar vídeo
             </>
           )}
         </Button>
       </div>
       {!isEditing &&
-        (!initialData.imageUrl ? (
+        (!initialData.videoUrl ? (
           <div className="flex items-center justify-center h-60 bg-slate-200 rounded-md">
-            <ImageIcon className="h-10 w-10 text-slate-500" />
+            <Video className="h-10 w-10 text-slate-500" />
           </div>
         ) : (
           <div className="relative aspect-video mt-2">
-            <Image
-              alt="Upload"
-              fill
-              className="object-cover rouinded-md"
-              src={initialData.imageUrl}
-            />
+            Video enviado
           </div>
         ))}
 
       {isEditing && (
         <div>
           <FileUpload
-            endpoint="courseImage"
+            endpoint="chapterVideo"
             onChange={(url) => {
               if (url) {
-                onSubmit({ imageUrl: url });
+                onSubmit({ videoUrl: url });
               }
             }}
           />
           <div className="text-xs text-muted-foreground mt-4">
-            Proporção recomendada 16:9
+            Envie o vídeo deste capítulo
           </div>
+        </div>
+      )}
+      {initialData.videoUrl && !isEditing && (
+        <div className="text-xs text-muted-foreground mt-2">
+          Videos podem demorar alguns minutos para processar. Atualize a página se o vídeo não aparecer.
         </div>
       )}
     </div>
