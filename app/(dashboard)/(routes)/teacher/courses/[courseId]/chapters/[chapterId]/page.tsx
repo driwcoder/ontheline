@@ -7,6 +7,7 @@ import { redirect } from "next/navigation";
 import { ChapterTitleForm } from "./_components/chapter-title-form";
 import { ChapterDescriptionForm } from "./_components/chapter-description-form";
 import { ChapterAccessForm } from "./_components/chapter-access-form";
+import { ChapterVideoForm } from "./_components/chapter-video-form";
 
 export default async function ChapterIdPage({
   params,
@@ -59,7 +60,7 @@ export default async function ChapterIdPage({
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-1 md: grid-col-2 gap-6 mt-16">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
         <div className="space-y-4">
           <div>
             <div className="flex items-center gap-x-2">
@@ -98,6 +99,11 @@ export default async function ChapterIdPage({
             <IconBadge icon={Video} />
             <h2 className="text-xl">Adicione um vídeo</h2>
           </div>
+          <ChapterVideoForm 
+            initialData={chapter}
+            chapterId={params.chapterId}
+            courseId={params.courseId}
+          />
         </div>
       </div>
     </div>

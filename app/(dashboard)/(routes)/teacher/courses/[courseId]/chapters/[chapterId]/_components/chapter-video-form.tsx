@@ -2,7 +2,7 @@
 
 import * as z from "zod";
 import axios from "axios";
-import {  Pencil, PlusCircle, Video } from "lucide-react";
+import { Pencil, PlusCircle, Video } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -15,14 +15,18 @@ import { FileUpload } from "@/components/file-upload";
 interface ChapterVideoFormProps {
   initialData: Chapter & { muxData?: MuxData | null };
   courseId: string;
-  chapterId: string
+  chapterId: string;
 }
 
 const formSchema = z.object({
   videoUrl: z.string().min(1),
 });
 
-export const ChapterVideoForm = ({ initialData, courseId, chapterId }: ChapterVideoFormProps) => {
+export const ChapterVideoForm = ({
+  initialData,
+  courseId,
+  chapterId,
+}: ChapterVideoFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const toggleEdit = () => setIsEditing((current) => !current);
@@ -31,7 +35,10 @@ export const ChapterVideoForm = ({ initialData, courseId, chapterId }: ChapterVi
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.patch(`/api/courses/${courseId}/chapter/${chapterId}`, values);
+      await axios.patch(
+        `/api/courses/${courseId}/chapters/${chapterId}`,
+        values
+      );
       toast({
         title: "Capítulo atualizado",
         description: "Um vídeo foi adicionado ao capítulo!",
@@ -51,7 +58,7 @@ export const ChapterVideoForm = ({ initialData, courseId, chapterId }: ChapterVi
   return (
     <div className="mt-2 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Imagem do curso
+        Vídeo do capítulo
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing && <>Cancelar</>}
           {!isEditing && !initialData.videoUrl && (
@@ -74,9 +81,7 @@ export const ChapterVideoForm = ({ initialData, courseId, chapterId }: ChapterVi
             <Video className="h-10 w-10 text-slate-500" />
           </div>
         ) : (
-          <div className="relative aspect-video mt-2">
-            Video enviado
-          </div>
+          <div className="relative aspect-video mt-2">Video enviado!</div>
         ))}
 
       {isEditing && (
@@ -96,7 +101,8 @@ export const ChapterVideoForm = ({ initialData, courseId, chapterId }: ChapterVi
       )}
       {initialData.videoUrl && !isEditing && (
         <div className="text-xs text-muted-foreground mt-2">
-          Videos podem demorar alguns minutos para processar. Atualize a página se o vídeo não aparecer.
+          Videos podem demorar alguns minutos para processar. Atualize a página
+          se o vídeo não aparecer.
         </div>
       )}
     </div>
