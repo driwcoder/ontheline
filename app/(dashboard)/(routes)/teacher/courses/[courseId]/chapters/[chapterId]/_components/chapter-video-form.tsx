@@ -5,7 +5,7 @@ import axios from "axios";
 import { Pencil, PlusCircle, Video } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
+import MuxPlayer from "@mux/mux-player-react";
 
 import { Chapter, MuxData } from "@prisma/client";
 import { Button } from "@/components/ui/button";
@@ -56,7 +56,7 @@ export const ChapterVideoForm = ({
   };
 
   return (
-    <div className="mt-2 border bg-slate-100 rounded-md p-4">
+    <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
         Vídeo do capítulo
         <Button onClick={toggleEdit} variant="ghost">
@@ -81,7 +81,11 @@ export const ChapterVideoForm = ({
             <Video className="h-10 w-10 text-slate-500" />
           </div>
         ) : (
-          <div className="relative aspect-video mt-2">Video enviado!</div>
+          <div className="relative aspect-video mt-2">
+            <MuxPlayer 
+              playbackId={initialData?.muxData?.playbackId || ""}
+            />
+          </div>
         ))}
 
       {isEditing && (
