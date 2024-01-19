@@ -3,6 +3,7 @@ import { Roboto_Mono } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "@/components/ui/toaster";
+import { ConfettiProvider } from "@/components/providers/confetti-provider";
 
 const roboto = Roboto_Mono({
   subsets: ["latin"],
@@ -23,6 +24,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="pt-br">
         <body className={` ${roboto.className}`}>
+          <ConfettiProvider />
           {children}
           <Toaster />
         </body>
