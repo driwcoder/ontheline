@@ -19,7 +19,7 @@ const CoursesPage = async () => {
       userId,
     },
     orderBy: {
-      createAt: "desc",
+      createdAt: "desc",
     },
   });
 

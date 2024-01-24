@@ -7,13 +7,13 @@ async function main() {
   try {
     await database.category.createMany({
       data: [
-        {name: "Comunicação"},
-        {name: "Ciencia da Computação"},
+        {name: "Música"},
         {name: "Fotografia"},
         {name: "Bem estar"},
-        {name: "Marketing Digital"},
-        {name: "Música"},
         {name: "Influencer"},
+        {name: "Ciência da Computação"},
+        {name: "Marketing Digital"},
+        {name: "Comunicação"},
       ]
     })
     console.log("Sucesso!")

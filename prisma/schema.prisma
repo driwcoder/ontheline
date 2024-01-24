@@ -6,8 +6,8 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
-
 
 model Course {
   id String @id @default(uuid())
@@ -25,10 +25,11 @@ model Course {
   attachments Attachment[]
   purchases Purchase[]
 
-  createAt DateTime @default(now())
-  updateAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([categoryId])
+  @@fulltext([title])
 }
 
 model Category {
@@ -95,7 +96,7 @@ model UserProgress {
   updatedAt DateTime @updatedAt
 
   @@index([chapterId])
-  @@index([userId, chapterId])
+  @@unique([userId, chapterId])
 }
 
 model Purchase {
@@ -108,11 +109,12 @@ model Purchase {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt()
 
+  @@unique([userId, courseId])
   @@index([courseId])
 }
 
 model StripeCustomer {
-  id String @default(uuid())
+  id String @id @default(uuid())
   userId String @unique
   stripeCustomerId String @unique
 

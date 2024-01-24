@@ -23,7 +23,7 @@ const iconMap: Record<Category["name"], IconType> = {
   "Música": FcMusic,
   "Fotografia": FcOldTimeCamera,
   "Bem estar": FcSportsMode,
-  "Contabeis": FcSalesPerformance,
+  "Influencer": FcSalesPerformance,
   "Ciência da Computação": FcMultipleDevices,
   "Marketing Digital": FcBusiness,
   "Comunicação": FcVoicePresentation,
