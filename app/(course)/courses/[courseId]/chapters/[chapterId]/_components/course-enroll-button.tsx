@@ -28,7 +28,7 @@ export const CourseEnrollButton = ({
     } catch {
       toast({
         title: "Algo errado aconteceu",
-        description: " O capítulo deu trinca",
+        description: "Tente novamente mais tarde.",
         variant: "destructive"
       })
     } finally {

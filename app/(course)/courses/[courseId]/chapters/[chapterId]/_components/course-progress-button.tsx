@@ -43,7 +43,7 @@ export const CourseProgressButton = ({
       }
 
       toast({
-        title: "Parabéns",
+        title: "",
         description: "Progresso atualizado"
       })
       router.refresh();
@@ -65,10 +65,10 @@ export const CourseProgressButton = ({
       onClick={onClick}
       disabled={isLoading}
       type="button"
-      variant={isCompleted ? "outline" : "default"}
+      variant={isCompleted ? "outline" : "success"}
       className="w-full md:w-auto"
     >
-      {isCompleted ? "Not completed" : "Mark as complete"}
+      {isCompleted ? "Marcar como incompleto" : "Marque como completo"}
       <Icon className="h-4 w-4 ml-2" />
     </Button>
   )
