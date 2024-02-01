@@ -1,13 +1,17 @@
-import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
-export async function POST(req: Request) {
+import { db } from "@/lib/db";
+import { isTeacher } from "@/lib/teacher";
+
+export async function POST(
+  req: Request,
+) {
   try {
     const { userId } = auth();
     const { title } = await req.json();
 
-    if (!userId) {
+    if (!userId || !isTeacher(userId)) {
       return new NextResponse("Não autorizado", { status: 401 });
     }
 
@@ -15,11 +19,12 @@ export async function POST(req: Request) {
       data: {
         userId,
         title,
-      },
+      }
     });
-    return NextResponse.json(course)
+
+    return NextResponse.json(course);
   } catch (error) {
     console.log("[COURSES]", error);
-    return new NextResponse("Erro interno", { status: 500 });
+    return new NextResponse("Internal Error", { status: 500 });
   }
 }

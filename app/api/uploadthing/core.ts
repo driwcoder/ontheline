@@ -1,13 +1,17 @@
 import { auth } from "@clerk/nextjs";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 
+import { isTeacher } from "@/lib/teacher";
+ 
 const f = createUploadthing();
-
+ 
 const handleAuth = () => {
   const { userId } = auth();
-  if (!userId) throw new Error("Não autorizado");
+  const isAuthorized = isTeacher(userId);
+
+  if (!userId || !isAuthorized) throw new Error("Não autorizado");
   return { userId };
-};
+}
 
 export const ourFileRouter = {
   courseImage: f({ image: { maxFileSize: "4MB", maxFileCount: 1 } })
@@ -18,9 +22,7 @@ export const ourFileRouter = {
     .onUploadComplete(() => {}),
   chapterVideo: f({ video: { maxFileCount: 1, maxFileSize: "512GB" } })
     .middleware(() => handleAuth())
-    .onUploadComplete(() => {}),
+    .onUploadComplete(() => {})
 } satisfies FileRouter;
-
+ 
 export type OurFileRouter = typeof ourFileRouter;
-
-// video da aula 07:34
