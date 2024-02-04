@@ -7,13 +7,13 @@ import { useRouter } from "next/navigation";
 
 const guestRoutes = [
   {
-    icon: Layout,
-    label: "Painel",
+    icon: Compass,
+    label: "Navegar",
     href: "/",
   },
   {
-    icon: Compass,
-    label: "Pesquise",
+    icon: Layout,
+    label: "Meus cursos",
     href: "/search",
   },
 ];
